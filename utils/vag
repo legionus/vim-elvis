@@ -1,0 +1,21 @@
+#!/bin/sh -efu
+
+{
+	echo 'vim:nowrap:nolist:ft=elvis:'
+	echo
+	ag -Hn "$@" |
+	while read -r s; do
+		if [ -z "$s" ]; then
+			fn=
+			echo
+			continue
+		fi
+		if [ -z "${fn-}" ]; then
+			fn="$s"
+			echo "[[open://$fn#1][$fn]]"
+			continue
+		fi
+		lineno="${s%%:*}"
+		echo "[[open://$fn#$lineno][$lineno]]: ${s#*:}"
+	done
+} | vim -
