@@ -78,7 +78,7 @@ function! s:EvalLink()
 		silent execute("1,$d")
 		silent execute(".!" . link.target)
 		if link.text != ""
-			silent execute(":f " . link.text)
+			silent execute(":f -/" . link.text)
 		endif
 		return
 	endif
