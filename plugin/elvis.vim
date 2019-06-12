@@ -76,6 +76,7 @@ function! s:EvalLink()
 
 	if link.protocol == "exec"
 		silent execute(":setlocal buftype=nofile")
+		silent execute(":setlocal bufhidden=delete")
 		silent execute(":setlocal noswapfile")
 		silent execute("1,$d")
 		silent execute(".!" . link.target)
