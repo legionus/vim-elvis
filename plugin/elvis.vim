@@ -75,13 +75,11 @@ function! s:EvalLink()
 	endif
 
 	if link.protocol == "exec"
-		let out = system(link.target)
-		silent tabnew
-		silent put=out
+		silent execute("1,$d")
+		silent execute(".!" . link.target)
 		if link.text != ""
 			silent execute(":f " . link.text)
 		endif
-		call <SID>Init()
 		return
 	endif
 
