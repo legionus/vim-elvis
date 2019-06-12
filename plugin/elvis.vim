@@ -47,9 +47,11 @@ function! s:FindLink()
 	let c = 0
 	while c < strlen(line)
 		if line[c:c+1] == ']['
-			let ret.protocol = substitute(line[1:c-1], "://.*", "", "")
-			let ret.target   = substitute(line[1:c-1], "^.*://", "", "")
-			let ret.text     = line[c+2:-2]
+			if line[1:c-1] =~ '://'
+				let ret.protocol = substitute(line[1:c-1], "://.*", "", "")
+			endif
+			let ret.target = substitute(line[1:c-1], "^.*://", "", "")
+			let ret.text   = line[c+2:-2]
 			break
 		endif
 		let c += 1
