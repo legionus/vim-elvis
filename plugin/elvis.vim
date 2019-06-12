@@ -4,16 +4,7 @@ endif
 let g:loaded_elvis_plugin = 1
 
 function! s:Init()
-	if exists('b:initialized_elvis')
-		return
-	endif
-	let b:initialized_elvis = 1
-
-	syntax match hyperlink "\[\{2}[^][]*\(\]\[[^][]*\)\?\]\{2}" contains=hyperlinkBracketsLeft,hyperlinkURL,hyperlinkBracketsRight containedin=ALL
-	syntax match hyperlinkBracketsLeft      contained "\[\{2}#\?"  conceal
-	syntax match hyperlinkURL               contained "[^][]*\]\[" conceal
-	syntax match hyperlinkBracketsRight     contained "\]\{2}"     conceal
-	hi def link hyperlink Underlined
+	silent execute("runtime syntax/elvis.vim")
 endfunction
 
 function! s:FindLink()
