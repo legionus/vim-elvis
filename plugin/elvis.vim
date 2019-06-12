@@ -86,11 +86,12 @@ function! s:EvalLink()
 	if link.protocol == "open"
 		let filename = substitute(link.target, "#[^#]*$", "", "")
 		let lineno = substitute(link.target, "^.*#", "", "")
-		silent tabnew
-		silent execute("open " . fnameescape(filename))
+		let cmd = ":tabedit"
 		if lineno != link.target
-			silent execute(":" . str2nr(lineno))
+			let cmd .= " +:" . str2nr(lineno)
 		endif
+		let cmd .= " " . fnameescape(filename)
+		silent execute(cmd)
 		call <SID>Init()
 		return
 	endif
