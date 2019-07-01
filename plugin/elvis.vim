@@ -68,14 +68,30 @@ function! s:EvalLink()
 	endif
 
 	if link.protocol == "exec"
+		let out = systemlist(link.target)
+
+		let i = 0
+		while out[i] =~ '^elvis:'
+			silent execute(out[i][6:])
+			let i = i + 1
+		endwhile
+		let out = out[i:]
+
 		silent execute(":setlocal buftype=nofile")
 		silent execute(":setlocal bufhidden=delete")
 		silent execute(":setlocal noswapfile")
 		silent execute("1,$d")
-		silent execute(".!" . link.target)
+
+		let i = 0
+		for line in out
+			silent execute(":". i . "put =line")
+			let i = i + 1
+		endfor
+
 		if link.text != ""
 			silent execute(":f -/" . link.text)
 		endif
+		call <SID>Init()
 		return
 	endif
 
