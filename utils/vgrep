@@ -1,7 +1,14 @@
 #!/bin/sh -efu
 
+run()
 {
 	echo 'vim:nowrap:nolist:noswapfile:bt=nofile:bh=delete:ft=elvis:'
 	grep -Hn "$@" |
 		sed -r -e 's,^(.*):([0-9]+):,[[open://\1#\2][\1]]:\2:,'
-} | vim -
+}
+
+if [ -z "${MYVIMRC-}" ]; then
+	run "$@" |vim -
+else
+	run "$@"
+fi

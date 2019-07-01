@@ -1,5 +1,6 @@
 #!/bin/sh -efu
 
+run()
 {
 	echo 'vim:nowrap:nolist:noswapfile:bt=nofile:bh=delete:ft=elvis:'
 	echo
@@ -18,4 +19,10 @@
 		lineno="${s%%:*}"
 		echo "[[open://$fn#$lineno][$lineno]]: ${s#*:}"
 	done
-} | vim -
+}
+
+if [ -z "${MYVIMRC-}" ]; then
+	run "$@" |vim -
+else
+	run "$@"
+fi
