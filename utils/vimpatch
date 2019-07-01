@@ -1,0 +1,36 @@
+#!/bin/sh -efu
+
+t="${1?}"
+prog="$(readlink -ev "$0")"
+
+run()
+{
+	echo 'vim:nowrap:noswapfile:bt=nofile:ft=elvis:'
+
+	if [ -z "${VIM_PATCH_HIDE_SUMMAY-}" ]; then
+		filterdiff --exclude='*' "$t"
+		echo '--'
+	fi
+
+	local i=1
+	filterdiff --status --list "$t" |
+	while read -r state fn; do
+		printf '%s [[exec://%s %s][%s]]\n' "$state" "$prog" "$i" "$fn"
+		i=$(($i+1))
+	done
+	echo
+}
+
+if [ -n "${_VIM_PATCH-}" ]; then
+	echo 'elvis: tabnew | setlocal nowrap filetype=diff'
+	filterdiff -F "$t" "$_VIM_PATCH"
+	exit 0
+fi
+
+export _VIM_PATCH="$t"
+
+if [ -z "${MYVIMRC-}" ]; then
+	run |vim -
+else
+	run
+fi
