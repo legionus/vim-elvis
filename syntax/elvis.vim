@@ -8,9 +8,17 @@ endif
 
 let b:current_syntax_elvis = 1
 
-syntax match hyperlink "\[\{2}[^][]*\(\]\[[^][]*\)\?\]\{2}" contains=hyperlinkBracketsLeft,hyperlinkURL,hyperlinkBracketsRight containedin=.*
-syntax match hyperlinkBracketsLeft      contained "\[\{2}#\?"  conceal
-syntax match hyperlinkURL               contained "[^][]*\]\[" conceal
-syntax match hyperlinkBracketsRight     contained "\]\{2}"     conceal
-highlight default link hyperlink Underlined
+syntax region hyperlink     start="\[\["       end="\]\]"       skip="\\[\[\]]" keepend conceal contains=hyperlinkURL,hyperlinkText,hyperlinkBracketsRight containedin=.*
+syntax region hyperlinkURL  start="\[\["       end="\]\["me=e-2 skip="\\[\[\]]" contained keepend conceal
+syntax region hyperlinkText start="\]\["ms=s+2 end="\]\]"me=e-2 skip="\\[\[\]]" contained keepend contains=hyperlinkTextQuote
+syntax match hyperlinkTextQuote "\\\([\[\]]\)\@=" contained conceal
+
+highlight default link hyperlinkText Underlined
+
+"highlight default hyperlink     guifg=Blue  ctermfg=Blue
+"highlight default hyperlinkURL  guifg=Green ctermfg=Green
+"highlight default hyperlinkText guifg=Red   ctermfg=Red
+
+"highlight default hyperlinkBracketsLeft   guifg=Yellow ctermfg=Yellow
+"highlight default hhyperlinkBracketsRight guifg=Yellow ctermfg=Yellow
 
